@@ -30,7 +30,7 @@ exports.login = (req, res) => {
 
     const token = jwt.sign(
       { uid: user.id, role: user.role },
-      'SECRET_KEY',
+      'config.SECRET',
       { expiresIn: '1d' }
     )
 
@@ -52,3 +52,25 @@ exports.updateProfile = (req, res) => {
     res.send(result.createResult(err, data))
   })
 }
+
+// Delete a service by ID
+exports.deleteService = (req, res) => {
+  const { id } = req.body
+
+  if (!id) {
+    return res.send(result.createResult('Service ID is required'))
+  }
+
+  const sql = `DELETE FROM services WHERE id = ?`
+
+  pool.query(sql, [id], (err, data) => {
+    if (err) return res.send(result.createResult(err))
+
+    if (data.affectedRows === 0) {
+      return res.send(result.createResult('No service found with this ID'))
+    }
+
+    res.send(result.createResult(null, 'Service deleted successfully'))
+  })
+}
+

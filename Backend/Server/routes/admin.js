@@ -1,6 +1,11 @@
 const express = require('express')
 const pool = require('../utils/db')
 const result = require('../utils/result')
+const adminController = require('../controllers/adminController')
+const { authenticate } = require('../middleware/auth')
+
+const { allowRoles } = require('../middleware/role')
+
 
 const router = express.Router()
 
@@ -29,5 +34,44 @@ router.get('/statistics', (req, res) => {
     res.send(result.createResult(err, data[0]))
   })
 })
+
+router.post(
+  '/stations',
+   authenticate,
+  allowRoles(['admin', 'superadmin']),
+  adminController.createStation
+)
+
+
+router.post(
+  '/services',
+   authenticate,
+  allowRoles(['admin', 'superadmin']),
+  adminController.createService
+)
+
+
+router.post(
+  '/station-services',
+  authenticate,
+  allowRoles(['admin', 'superadmin']),
+  adminController.addServiceToStation
+)
+
+router.put(
+  '/services',
+  authenticate, // middleware to verify JWT
+  allowRoles(['admin', 'superadmin']),
+  adminController.updateService
+)
+
+router.delete(
+  '/services',
+  authenticate,                     // JWT middleware
+  allowRoles(['admin', 'superadmin']),
+  adminController.deleteService
+)
+
+
 
 module.exports = router
