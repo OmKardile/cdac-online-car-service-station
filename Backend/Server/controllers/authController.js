@@ -25,6 +25,9 @@ exports.login = (req, res) => {
       return res.send(result.createErrorResult('Invalid credentials'))
 
     const user = data[0]
+    console.log("Database user object:", user);
+    console.log("User role field:", user.role);
+    
     if (!bcrypt.compareSync(password, user.password))
       return res.send(result.createErrorResult('Invalid credentials'))
 
@@ -34,7 +37,9 @@ exports.login = (req, res) => {
       { expiresIn: '1d' }
     )
 
-    res.send(result.createResult(null, { token }))
+    const responseData = { token, role: user.role, email: user.email, uid: user.id };
+    console.log("Login response data:", responseData);
+    res.send(result.createResult(null, responseData))
   })
 }
 

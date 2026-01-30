@@ -5,7 +5,7 @@ import Topbar from "@/components/Topbar";
 import { getAllBookings, updateBookingStatus } from "@/utils/api";
 
 const statusColors = {
-  pending: "bg-yellow-100 text-yellow-700",
+  pending: "bg-yellow-100 text-yellow-700 ",
   confirmed: "bg-blue-100 text-blue-700",
   in_progress: "bg-purple-100 text-purple-700",
   completed: "bg-green-100 text-green-700",
@@ -77,7 +77,7 @@ export default function AllBookings() {
                   </td>
                   <td className="p-4">${booking.totalPrice}</td>
                   <td className="p-4">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${statusColors[booking.status]}`}>
+                    <span className={`px-2 py-1 rounded text-sm font-bold ${statusColors[booking.status]}`}>
                       {booking.status}
                     </span>
                   </td>

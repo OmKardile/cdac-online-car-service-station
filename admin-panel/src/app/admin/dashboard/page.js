@@ -13,9 +13,8 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       const result = await getAdminStatistics();
-      if (result.status || result.status === 'success') {
-        const data = result.data || result;
-        setStats(data);
+      if (result.status && result.data) {
+        setStats(result.data);
       }
       setLoading(false);
     };

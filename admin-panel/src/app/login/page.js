@@ -18,16 +18,21 @@ export default function LoginPage() {
 
     const result = await loginUser(email, password);
 
-    if (result.status) {
-      const { token, role } = result.data;
+    if (result.status && result.data) {
+      const { token, role, email: userEmail } = result.data;
       const uid = result.data.uid || "";
 
+      console.log("Login result:", result.data);
+      console.log("Role received:", role);
+
       localStorage.setItem("token", token);
-      localStorage.setItem("role", role);
-      localStorage.setItem("email", result.data.email);
+      localStorage.setItem("role", role.toLowerCase());
+      localStorage.setItem("email", userEmail);
       if (uid) localStorage.setItem("uid", uid);
 
-      const dashboard = role === "admin" ? "/admin/dashboard" : "/super-admin/dashboard";
+      console.log("Role stored in localStorage:", localStorage.getItem("role"));
+
+      const dashboard = role.toLowerCase() === "admin" ? "/admin/dashboard" : "/super-admin/dashboard";
       router.push(dashboard);
     } else {
       setError(result.message || "Login failed");
@@ -40,7 +45,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-sm bg-white rounded-xl shadow-xl p-8">
         <h1 className="text-2xl font-semibold text-center mb-6">
-          Admin Login
+          Admin Panel Login
         </h1>
 
         {error && (
@@ -77,7 +82,8 @@ export default function LoginPage() {
         </form>
 
         <p className="text-xs text-gray-500 mt-4 text-center">
-          Demo: admin@example.com / password
+          admin@example.com / password
+          superadmin@example.com / password
         </p>
       </div>
     </div>
