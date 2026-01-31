@@ -18,7 +18,7 @@ export default function LoginPage() {
 
     const result = await loginUser(email, password);
 
-    if (result.status) {
+    if (result.status === 'success') {
       const { token, role } = result.data;
       const uid = result.data.uid || "";
 
@@ -30,7 +30,7 @@ export default function LoginPage() {
       const dashboard = role === "admin" ? "/admin/dashboard" : "/super-admin/dashboard";
       router.push(dashboard);
     } else {
-      setError(result.message || "Login failed");
+      setError(result.error?.message || result.message || "Login failed");
     }
 
     setLoading(false);

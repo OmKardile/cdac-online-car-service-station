@@ -34,7 +34,12 @@ exports.login = (req, res) => {
       { expiresIn: '1d' }
     )
 
-    res.send(result.createResult(null, { token }))
+    res.send(result.createResult(null, { 
+      token, 
+      role: user.role, 
+      email: user.email,
+      uid: user.id 
+    }))
   })
 }
 
