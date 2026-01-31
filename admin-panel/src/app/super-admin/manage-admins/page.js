@@ -84,12 +84,12 @@ export default function ManageAdmins() {
                   <td className="p-4">{user.phone}</td>
                   <td className="p-4">
                     <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${
+                      className={`px-2 py-1 rounded text-xs font-bold ${
                         user.role === "superadmin"
                           ? "bg-purple-100 text-purple-700"
                           : user.role === "admin"
                           ? "bg-blue-100 text-blue-700"
-                          : "bg-gray-100 text-gray-700"
+                          : "bg-gray-500 text-gray-100"
                       }`}
                     >
                       {user.role}
@@ -99,7 +99,7 @@ export default function ManageAdmins() {
                     <select
                       value={user.role}
                       onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                      className="text-xs border rounded px-2 py-1"
+                      className="text-xs font-serif border rounded px-2 py-1 "
                     >
                       <option value="client">Client</option>
                       <option value="admin">Admin</option>

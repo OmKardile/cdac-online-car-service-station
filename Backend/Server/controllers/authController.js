@@ -25,6 +25,9 @@ exports.login = (req, res) => {
       return res.send(result.createErrorResult('Invalid credentials'))
 
     const user = data[0]
+    console.log("Database user object:", user);
+    console.log("User role field:", user.role);
+    
     if (!bcrypt.compareSync(password, user.password))
       return res.send(result.createErrorResult('Invalid credentials'))
 

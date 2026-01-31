@@ -49,40 +49,61 @@ exports.createService = (req, res) => {
   const { name, description, basePrice, estimatedDuration } = req.body
 
   const sql = `
-    INSERT INTO services (name, description, basePrice, estimatedDuration)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO services (name, description, basePrice, estimatedDuration, createdAt, updatedAt)
+    VALUES (?, ?, ?, ?, NOW(), NOW())
   `
 
   pool.query(
     sql,
     [name, description, basePrice, estimatedDuration],
     (err, data) => {
-      res.send(result.createResult(err, data))
+      if (err) return res.send(result.createResult(err))
+      
+      // Return the created service with the ID
+      const serviceData = {
+        id: data.insertId,
+        name,
+        description,
+        basePrice: parseFloat(basePrice),
+        estimatedDuration: parseInt(estimatedDuration),
+        isActive: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+      res.send(result.createResult(null, serviceData))
     }
   )
 }
 
 exports.updateService = (req, res) => {
-  const { id, basePrice } = req.body
+  const { id, name, description, basePrice, estimatedDuration } = req.body
 
-  if (!id || basePrice === undefined) {
+  if (!id) {
     return res.send(
-      result.createResult('Service ID and new basePrice are required')
+      result.createResult('Service ID is required')
     )
   }
 
   const sql = `
     UPDATE services
-    SET basePrice = ?
+    SET name = ?, description = ?, basePrice = ?, estimatedDuration = ?
     WHERE id = ?
   `
 
-  pool.query(sql, [basePrice, id], (err, data) => {
+  pool.query(sql, [name, description, basePrice, estimatedDuration, id], (err, data) => {
     if (err) return res.send(result.createResult(err))
     if (data.affectedRows === 0)
       return res.send(result.createResult('No service found with this ID'))
 
-    res.send(result.createResult(null, 'Service updated successfully'))
+    const serviceData = {
+      id,
+      name,
+      description,
+      basePrice: parseFloat(basePrice),
+      estimatedDuration: parseInt(estimatedDuration),
+      isActive: 1
+    }
+    res.send(result.createResult(null, serviceData))
   })
 }
 

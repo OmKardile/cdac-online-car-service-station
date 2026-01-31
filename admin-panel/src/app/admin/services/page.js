@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Topbar from "@/components/Topbar";
-import { getServices, createService, updateService, deleteService } from "@/utils/api";
+import {
+  getServices,
+  createService,
+  updateService,
+  deleteService,
+} from "@/utils/api";
 
 export default function ManageServices() {
   const [services, setServices] = useState([]);
@@ -30,7 +35,7 @@ export default function ManageServices() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const payload = {
       ...formData,
       basePrice: parseFloat(formData.basePrice),
@@ -45,7 +50,12 @@ export default function ManageServices() {
     }
 
     if (result.status) {
-      setFormData({ name: "", description: "", basePrice: "", estimatedDuration: "" });
+      setFormData({
+        name: "",
+        description: "",
+        basePrice: "",
+        estimatedDuration: "",
+      });
       setEditing(null);
       setShowForm(false);
       fetchServices();
@@ -90,7 +100,12 @@ export default function ManageServices() {
           onClick={() => {
             setShowForm(!showForm);
             setEditing(null);
-            setFormData({ name: "", description: "", basePrice: "", estimatedDuration: "" });
+            setFormData({
+              name: "",
+              description: "",
+              basePrice: "",
+              estimatedDuration: "",
+            });
           }}
           className="btn-primary w-32 mb-4"
         >
@@ -98,14 +113,19 @@ export default function ManageServices() {
         </button>
 
         {showForm && (
-          <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow mb-6">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white p-6 rounded-xl shadow mb-6"
+          >
             <div className="grid grid-cols-2 gap-4">
               <input
                 type="text"
                 className="input"
                 placeholder="Service Name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 required
               />
               <input
@@ -113,7 +133,9 @@ export default function ManageServices() {
                 className="input"
                 placeholder="Description"
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
               />
               <input
                 type="number"
@@ -121,7 +143,9 @@ export default function ManageServices() {
                 className="input"
                 placeholder="Base Price"
                 value={formData.basePrice}
-                onChange={(e) => setFormData({ ...formData, basePrice: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, basePrice: e.target.value })
+                }
                 required
               />
               <input
@@ -129,7 +153,12 @@ export default function ManageServices() {
                 className="input"
                 placeholder="Est. Duration (mins)"
                 value={formData.estimatedDuration}
-                onChange={(e) => setFormData({ ...formData, estimatedDuration: e.target.value })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    estimatedDuration: e.target.value,
+                  })
+                }
                 required
               />
             </div>
@@ -160,13 +189,17 @@ export default function ManageServices() {
                   <td className="p-4 space-x-2">
                     <button
                       onClick={() => handleEdit(service)}
-                      className="text-indigo-600 hover:underline"
+                      className="text-white bg-green-700 hover:text-green-700
+                                hover:bg-gray-100 border-2 rounded-xl py-1 px-4 
+                                  transition ease-in-out duration-300"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(service.id)}
-                      className="text-red-600 hover:underline"
+                      className="text-white bg-orange-700 hover:text-orange-700
+                                hover:bg-gray-100 border-2 rounded-xl py-1 px-4 
+                                  transition ease-in-out duration-300 "
                     >
                       Delete
                     </button>

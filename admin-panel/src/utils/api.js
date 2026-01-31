@@ -1,6 +1,24 @@
 const API_BASE_URL = 'http://localhost:5000/api';
 
+// Normalize response format from backend
+const normalizeResponse = (data) => {
+  // Handle backend response format: { status: 'success'|'error', data?, error? }
+  if (data.status === 'success') {
+    return { status: true, data: data.data };
+  }
+  if (data.status === 'error') {
+    return { status: false, message: data.error?.message || 'Request failed' };
+  }
+  // Handle alternative format: { status: true/false, data?, message? }
+  if (typeof data.status === 'boolean') {
+    return data;
+  }
+  // Fallback
+  return data;
+};
+
 export const apiCall = async (endpoint, options = {}) => {
+  // Get token from localStorage
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const uid = typeof window !== 'undefined' ? localStorage.getItem('uid') : null;
 
@@ -18,7 +36,7 @@ export const apiCall = async (endpoint, options = {}) => {
     });
 
     const data = await response.json();
-    return data;
+    return normalizeResponse(data);
   } catch (error) {
     console.error('API Error:', error);
     return { status: false, message: error.message };
